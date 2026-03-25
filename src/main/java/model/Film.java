@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -12,13 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Setter
+@Getter
 @Table(name = "film", schema = "sakila")
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "film_id", nullable = false)
-    private Short id;
+    private Short filmId;
 
     @Size(max = 255)
     @NotNull
@@ -56,7 +59,7 @@ public class Film {
     private String rating;
 
     @Lob
-    @Column(name = "special_features", columnDefinition = "enum('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes'")
+    @Column(name = "special_features", columnDefinition = "set('Trailers', 'Commentaries', 'Deleted Scenes', 'Behind the Scenes')")
     private String specialFeatures;
 
     @NotNull
@@ -71,4 +74,13 @@ public class Film {
             inverseJoinColumns = { @JoinColumn(name = "actor_id") }
     )
     private List<Actor> actors = new ArrayList<>();
+
+    public Film() {
+    }
+
+    public Film(Short filmId, String title, Short length) {
+        this.filmId = filmId;
+        this.title = title;
+        this.length = length;
+    }
 }
